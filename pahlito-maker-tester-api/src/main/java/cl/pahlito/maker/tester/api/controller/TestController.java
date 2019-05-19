@@ -28,7 +28,7 @@ public class TestController {
 		return testService.obtener(id);
 	}
 	@GetMapping(value="/", produces="application/json")
-	public List<TestDTO> testGet(@RequestParam("descripcion") String descripcion) {
+	public List<TestDTO> testGet(@RequestParam(value = "descripcion", required = false) String descripcion) {
 		return testService.getLista(descripcion);
 	}
 

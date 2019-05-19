@@ -20,6 +20,8 @@ import cl.pahlito.maker.tester.core.repository.TestRepository;
 @Service
 public class TestServiceImpl implements TestService {
 
+	private static final String COMODIN = "%";
+
 	@Autowired
 	private TestRepository testRepository;
 
@@ -40,10 +42,14 @@ public class TestServiceImpl implements TestService {
 		final List<TestDTO> lista = new ArrayList<TestDTO>();
 		BooleanExpression conditions = QTestEntity.testEntity.isNotNull();
 		if (StringUtils.hasText(descripcion)) {
-			conditions = conditions.and(QTestEntity.testEntity.descripcion.like(descripcion));
+			final StringBuilder busqueda = new StringBuilder();
+			busqueda.append(COMODIN);
+			busqueda.append(descripcion);
+			busqueda.append(COMODIN);
+			conditions = conditions.and(QTestEntity.testEntity.descripcion.like(busqueda.toString()));
 		}
-		final Iterable<TestEntity> testResult = testRepository.findAll(conditions);
-		testResult.forEach(testEntity -> lista.add(mapper.map(testEntity, TestDTO.class)));
+		final Iterable<TestEntity> result = testRepository.findAll(conditions);
+		result.forEach(testEntity -> lista.add(mapper.map(testEntity, TestDTO.class)));
 		return lista;
 	}
 
@@ -57,7 +63,9 @@ public class TestServiceImpl implements TestService {
 	@Override
 	public void eliminar(final Long id) {
 
-		testRepository.deleteById(id);
+		if (testRepository.existsById(id)) {
+			testRepository.deleteById(id);
+		}
 	}
 
 }
