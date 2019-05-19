@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>cl.pahlito.maker.test</groupId>
+  <artifactId>pahlito-maker-tester</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>PahlitoMaker Tester</name>
+  <description>pahlito-maker-tester</description>
+  <properties>
+	<java.version>1.8</java.version>
+	<jdk.version>1.8</jdk.version>
+  	<spring-boot.version>2.1.5.RELEASE</spring-boot.version>
+  	<modelmapper.version>2.3.2</modelmapper.version>
+  	<mysql-connector.version>8.0.15</mysql-connector.version>
+  	<querydsl.version>4.1.4</querydsl.version>
+  </properties>
+  <modules>
+  	<module>pahlito-maker-tester-commons</module>
+  	<module>pahlito-maker-tester-core</module>
+  	<module>pahlito-maker-tester-api</module>
+  </modules>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
