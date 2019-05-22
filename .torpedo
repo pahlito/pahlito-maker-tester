@@ -1,0 +1,168 @@
+1.- Configurar el Parent para que el projecto sea Spring Boot
+
+  <parent>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-parent</artifactId>
+	<version>2.1.5.RELEASE</version>
+  </parent>
+
+2.- Forzar el compilado en Java 1.8 en el Parent
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+3.- Agregar las dependencias para Spring Data JPA en el CORE
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			</dependency>
+		<dependency>
+		
+4.- Agregar la configuración para Entities y Repositories en el CORE
+
+@Configuration
+@EntityScan(basePackages = "cl.pahlito.maker.tester.core.entity")
+@EnableJpaRepositories(basePackages = "cl.pahlito.maker.tester.core.repository")
+
+5.- Generar las clases QDSL en el CORE
+		<dependency> 
+		    <groupId>com.querydsl</groupId> 
+		    <artifactId>querydsl-apt</artifactId> 
+		    </dependency>
+		<dependency> 
+		    <groupId>com.querydsl</groupId> 
+		    <artifactId>querydsl-jpa</artifactId> 
+		</dependency>
+
+		<plugin>
+			<groupId>com.mysema.maven</groupId>
+			<artifactId>apt-maven-plugin</artifactId>
+			<version>1.1.3</version>
+			<executions>
+				<execution>
+					<goals>
+						<goal>process</goal>
+					</goals>
+					<configuration>
+						<outputDirectory>target/generated-sources/java</outputDirectory>
+						<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+
+6.- Agregar dependencias para MySQL en el CORE
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+		
+7.- Agregar dependencias para Test Junit en el CORE
+
+        <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-test</artifactId>
+		    <scope>test</scope>
+		</dependency>
+
+10.- Hacer que la API pueda desplegar puertos para servicios
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+8.- Agregar anotaciones para que la API sea una Spring Boot Aplication
+
+@SpringBootApplication
+		
+	public static void main(String[] args) {
+		SpringApplication.run(TesterApplication.class, args);
+	}
+	
+9.- Crear la configuración para Spring Boot en la API de forma que reconozca los package de nuestra app
+
+@Configuration
+@ComponentScan("cl.pahlito.maker.tester")
+
+		
+11.- Hacer que la API se genere como un proyecto Spring Boot Ejecutable
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
+12.- Configurar conexión a la base de datos en properties
+
+#spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+#spring.jpa.hibernate.ddl-auto=create
+spring.datasource.url=jdbc:mysql://localhost:3306/pahlito_maker_tester?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+spring.datasource.username=pahlito_maker
+spring.datasource.password=pahlito_maker
+spring.datasource.driver.class=com.mysql.cj.jdbc.Driver
+
+13.- Agregar Swagger UI a la API
+
+@EnableSwagger2
+
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any()).build();
+	}
+
+
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>2.9.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>2.9.2</version>
+		</dependency>
+		
+14.- Test para controladores
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
